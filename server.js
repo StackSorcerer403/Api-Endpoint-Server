@@ -12,16 +12,16 @@ app.get('/api/prematch-events', (req, res) => {
     res.json(data);
 });
 
-// app.get('/api/odds/:matchId', (req, res) => {
-//     const matchId = parseInt(req.params.matchId, 10);
-//     const odds = getOdds();
+app.get('/api/odds/:matchId', (req, res) => {
+    const matchId = parseInt(req.params.matchId, 10);
+    const odds = getOdds();
 
-//     if (odds[matchId]) {
-//         res.json(odds[matchId]);
-//     } else {
-//         res.status(404).json({ error: 'Match not found' });
-//     }
-// });
+    if (odds[matchId]) {
+        res.json(odds[matchId]);
+    } else {
+        res.status(404).json({ error: 'Match not found' });
+    }
+});
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
