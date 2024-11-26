@@ -164,7 +164,11 @@ const fetchData = async () => {
       data: payload,
     };
 
+    console.log("Fetching data from API...");
+
     const response = await axios(url, options);
+
+    console.log("API response status:", response.status);
 
     if (response.status === 200) {
       data = response.data;
@@ -173,7 +177,11 @@ const fetchData = async () => {
       console.error(`Failed to fetch data: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error("Error fetching data:", error.message);
+    console.error(
+      "Error details:",
+      error.response ? error.response.data : error
+    );
   }
 };
 
