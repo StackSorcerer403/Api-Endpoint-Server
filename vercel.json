@@ -8,8 +8,14 @@
   ],
   "routes": [
     {
-      "src": "/api/prematch-events",
-      "dest": "/routes/prematch-events.js"
+      "src": "/api/prematch",
+      "dest": "/server.js"
     }
-  ]
+  ],
+  "env": {
+    "PORT": "3000",
+    "URL": "https://fito24.com/rdstn",
+    "PAYLOAD_ODDS": "",
+    "PAYLOAD_MATCH": "[[\"ga\",[\"bm_sp\",\"bm_sl\",\"bm_ep1\",\"bm_el1\",\"bm_mf1\",\"bm_cels530\",\"bm_celc530\",\"bm_celg530\",\"bm_celt530\",\"bm_cels9\",\"bm_celc9\",\"bm_celg9\",\"bm_celt9\",\"bm_cels5\",\"bm_celc5\",\"bm_celg5\",\"bm_celt5\",\"bm_cels0\",\"bm_celc0\",\"bm_celg0\",\"bm_celt0\"]]]"
+  }
 }
