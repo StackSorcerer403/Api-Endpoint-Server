@@ -24,12 +24,7 @@ const formatData = async (inputData) => {
             sid: sid
           });
         }
-      }
-
-      // Sort the formattedResults array by readableTime
-      formattedResults.sort(
-        (a, b) => new Date(a.startTime) - new Date(b.startTime)
-      );
+      }      
     }
   });
 

@@ -9,26 +9,27 @@ const globals = require("../src/globals");
 const router = express.Router();
 
 router.get("/:id", async (req, res) => {
-  const id = req.params.id;
-  const url = process.env.URL;
-  let payload = process.env.PAYLOAD_MATCH;
-  let sidId;
+  const matchId = req.params.id;
+  const apiUrl = process.env.URL;
+  let matchPayload = process.env.PAYLOAD_MATCH;
+  let selectedSidId;
 
-  // Add sidArray in Globals.js
-  const matchData = await fetchData(url, payload);
-  const formattedData = await formatData(matchData);
-  formattedData.forEach(element => {
-    if (element.id == id) {
-      sidId = element.sid;
+  const matchResponse = await fetchData(apiUrl, matchPayload);
+  const formattedMatchData = await formatData(matchResponse);
+  formattedMatchData.forEach((match) => {
+    if (match.id == matchId) {
+      selectedSidId = match.sid;
     }
   });
-  const sidArray = globals.sidArray;
 
-  payload = [];
-  payload.push(["gf", [...sidArray], [1001]]);
-  const data = await fetchData(url, payload); // Fetch data and store it in the variable
-  const result = await oddsData(data, sidId);
-  res.json(result);
+  const sidArray = globals.sidArray;
+  globals.sidArray = [];
+
+  const oddsPayload = [];
+  oddsPayload.push(["gf", [...sidArray], [1001]]);
+  const oddsResponse = await fetchData(apiUrl, oddsPayload); // Fetch data and store it in the variable
+  const oddsResult = await oddsData(oddsResponse, selectedSidId);
+  res.json(oddsResult);
 });
 
 module.exports = router;
