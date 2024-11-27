@@ -1,3 +1,5 @@
+const globals = require('./globals');
+
 const formatData = async (inputData) => {
   let formattedResults = [];
   inputData.forEach((dataItem) => {
@@ -9,7 +11,10 @@ const formatData = async (inputData) => {
         if (eventArray.hasOwnProperty(eventKey)) {
           const eventData = JSON.parse(eventArray[eventKey]);
           const readableTime = new Date(eventData.ts * 1000).toLocaleString();
-          const sid = (eventData.sid != null) ? eventData.sid[0] : "";
+          if (eventData.sid != null) {
+            sid = eventData.sid[0];
+            globals.sidArray.push(eventData.sid[0]);
+          }
           formattedResults.push({
             startTime: readableTime,
             id: eventKey,
@@ -21,8 +26,10 @@ const formatData = async (inputData) => {
         }
       }
 
-      // Sort the formattedResults array by readableTime 
-      formattedResults.sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+      // Sort the formattedResults array by readableTime
+      formattedResults.sort(
+        (a, b) => new Date(a.startTime) - new Date(b.startTime)
+      );
     }
   });
 

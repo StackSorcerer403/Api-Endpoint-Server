@@ -1,9 +1,9 @@
 const oddsData = async (inputData, dataId) => {
   let formattedResults = [];
-  inputData.forEach((dataItem) => {
-    let eventArray;
+  inputData.some((dataItem) => {
     if (dataItem[dataId] != null) {
       formattedResults.push(dataItem[dataId]);
+      return true; // Break the loop when condition is met
     }
   });
 
