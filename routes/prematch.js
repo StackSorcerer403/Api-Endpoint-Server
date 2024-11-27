@@ -6,7 +6,7 @@ const formatData = require("../src/formatData");
 
 const router = express.Router();
 
-router.get("/api/prematch", async (req, res) => {
+router.get("/", async (req, res) => {
   const url = process.env.URL;
   const payload = process.env.PAYLOAD_MATCH;  
   const data = await fetchData(url, payload); // Fetch data and store it in the variable
