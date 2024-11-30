@@ -4,7 +4,8 @@ const express = require("express");
 const fetchData = require("../src/fetchData");
 const oddsData = require("../src/oddsData");
 const formatData = require("../src/formatData");
-const globals = require("../src/globals");
+const marketData = require("../src/marketData");
+const oddsPayload = require("../src/oddsPayload");
 
 const router = express.Router();
 
@@ -18,17 +19,16 @@ router.get("/:id", async (req, res) => {
   const formattedMatchData = await formatData(matchResponse);
   formattedMatchData.forEach((match) => {
     if (match.id == matchId) {
-      selectedSidId = match.sid;
+      selectedSidId = match.map;
     }
   });
 
-  const sidArray = globals.sidArray;
-  globals.sidArray = [];
+  const marketResponse = await fetchData(apiUrl, [["ga",["bm_ctm1_en"]]]);
+  const marketArray = await marketData(marketResponse);
 
-  const oddsPayload = [];
-  oddsPayload.push(["gf", [...sidArray], [1001]]);
-  const oddsResponse = await fetchData(apiUrl, oddsPayload); // Fetch data and store it in the variable
-  const oddsResult = await oddsData(oddsResponse, selectedSidId);
+  const payload = await oddsPayload(selectedSidId);
+  const oddsResponse = await fetchData(apiUrl, payload); // Fetch data and store it in the variable
+  const oddsResult = await oddsData(oddsResponse, marketArray);
   res.json(oddsResult);
 });
 
