@@ -30,8 +30,15 @@ const payload3 = [
   ["ga", ["bm_ctm1_en"]],
 ];
 
+// Mutable global object
+const globalConfig = {
+  MatchResultGlobal: null,
+  formattedResultGlobal: null,
+};
+
 module.exports = {
   payload1,
   payload2,
   payload3,
+  globalConfig,
 };
