@@ -1,12 +1,13 @@
 const marketData = async (inputData) => {
   let formattedResults = {};
-  inputData.forEach((element) => {
-    for (const eventKey in element) {
-      const itemArray = element[eventKey];
-      for (let key in itemArray) {
-        if (itemArray.hasOwnProperty(key)) {
-            const obj = JSON.parse(itemArray[key]);
-            formattedResults[key] = obj[1];
+
+  inputData.forEach((dataEntry) => {
+    for (const eventKey in dataEntry) {
+      const itemsArray = dataEntry[eventKey];
+      for (let index in itemsArray) {
+        if (itemsArray.hasOwnProperty(index)) {
+            const obj = JSON.parse(itemsArray[index]);
+            formattedResults[index] = obj[1];
         }
       }
     }

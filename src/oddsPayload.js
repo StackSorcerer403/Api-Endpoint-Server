@@ -1,26 +1,21 @@
 const global = require('./constant');
 
-const oddsPayload = async(selectedSidId) => {
-  let oddsPayload = [];
-  if (selectedSidId != null) {
+const generateOddsPayload = async (selectedSidId) => {
+  const oddsPayloadArray = [];
+
+  if (selectedSidId !== null) {
     selectedSidId.forEach((sid, index) => {
-      if (index == 0) {
-        oddsPayload.push([
-          "ga", [sid]
-        ]);
-      } else if (index == 1) {
-        oddsPayload.push([
-          "gf", [sid], global.payload1
-        ]);
-      } else if (index == 2) {
-        oddsPayload.push([
-          "gf", [sid], global.payload2
-        ]);
+      if (index === 0) {
+        oddsPayloadArray.push(["ga", [sid]]);
+      } else if (index === 1) {
+        oddsPayloadArray.push(["gf", [sid], global.payload1]);
+      } else if (index === 2) {
+        oddsPayloadArray.push(["gf", [sid], global.payload2]);
       }
-    }); 
-  }  
+    });
+  }
 
-  return oddsPayload;
-}
+  return oddsPayloadArray;
+};
 
-module.exports = oddsPayload;
+module.exports = generateOddsPayload;

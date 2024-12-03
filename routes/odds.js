@@ -2,34 +2,48 @@ require("dotenv").config();
 
 const express = require("express");
 const fetchData = require("../src/fetchData");
-const oddsData = require("../src/oddsData");
-const formatData = require("../src/formatData");
-const marketData = require("../src/marketData");
-const oddsPayload = require("../src/oddsPayload");
+const processOddsData = require("../src/oddsData");
+const formatMatchData = require("../src/formatData");
+const getMarketData = require("../src/marketData");
+const createOddsPayload = require("../src/oddsPayload");
+const { payload3 } = require("../src/constant");
 
 const router = express.Router();
 
 router.get("/:id", async (req, res) => {
   const matchId = req.params.id;
   const apiUrl = process.env.URL;
-  let matchPayload = process.env.PAYLOAD_MATCH;
+  let matchPayload = payload3;
   let selectedSidId;
 
-  const matchResponse = await fetchData(apiUrl, matchPayload);
-  const formattedMatchData = await formatData(matchResponse);
-  formattedMatchData.forEach((match) => {
-    if (match.id == matchId) {
-      selectedSidId = match.map;
-    }
-  });
+  try {
+    // Fetch match data
+    const matchResponse = await fetchData(apiUrl, matchPayload);
 
-  const marketResponse = await fetchData(apiUrl, [["ga",["bm_ctm1_en"]]]);
-  const marketArray = await marketData(marketResponse);
+    // Format and find selected match ID
+    const matches = await formatMatchData(matchResponse);
+    matches.forEach(match => {
+      if (match.id === matchId) {
+        selectedSidId = match.map;
+      }
+    });
 
-  const payload = await oddsPayload(selectedSidId);
-  const oddsResponse = await fetchData(apiUrl, payload); // Fetch data and store it in the variable
-  const oddsResult = await oddsData(oddsResponse, marketArray);
-  res.json(payload);
+    // Get market data
+    const marketArray = await getMarketData(matchResponse);
+
+    // Create payload for odds data and fetch
+    const oddsPayload = await createOddsPayload(selectedSidId);
+    const oddsResponse = await fetchData(apiUrl, oddsPayload);
+
+    // Process odds data
+    const oddsResult = await processOddsData(oddsResponse, marketArray);
+
+    // Respond with processed odds data
+    res.json(oddsResult);
+  } catch (error) {
+    console.error("Error in fetching or processing data:", error.message);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 module.exports = router;

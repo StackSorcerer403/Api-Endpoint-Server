@@ -1,48 +1,54 @@
-const oddsData = async (oddsData, marketData) => {
+const processOddsData = async (oddsDataArray, marketDataMap) => {
   let formattedResults = [];
-  oddsData.forEach((dataItem) => {
-    for (const eventKey in dataItem) {
-      const item = dataItem[eventKey];
-      for (const key in item) {
-        if (key !== "time" && key !== "state") {
-          const keyString = marketData[key];
-          // console.log(item[key]);
-          let item1 = item[key];
-          if (typeof(item1) != "object") {
-            item1 = JSON.parse(item[key]);
+  
+  oddsDataArray.forEach((oddsEntry) => {
+    for (const eventKey in oddsEntry) {
+      const eventItem = oddsEntry[eventKey];
+      
+      for (const marketKey in eventItem) {
+        if (marketKey !== "time" && marketKey !== "state") {
+          const marketName = marketDataMap[marketKey];
+          
+          let marketItem = eventItem[marketKey];
+          if (typeof(marketItem) !== "object") {
+            marketItem = JSON.parse(eventItem[marketKey]);
           }
-          let oddArray = [];
-          let valArray = [];
-          for (const key1 in item1) {            
-            const item2 = item1[key1];
-            valArray = [];
-            for (const key2 in item2) {              
-              const item3 = item2[key2];
-              if (item3 != null) {
-                if (item3[0] !== undefined) {
-                  const val = item3[0] / 100;
-                  if (val != null) {
-                    valArray.push(val);                    
+          
+          let runnersArray = [];
+          let valuesArray = [];
+          
+          for (const runnerKey in marketItem) {            
+            const runnerData = marketItem[runnerKey];
+            valuesArray = [];
+            
+            for (const valueKey in runnerData) {              
+              const valueData = runnerData[valueKey];
+              if (valueData != null) {
+                if (valueData[0] !== undefined) {
+                  const normalizedValue = valueData[0] / 100;
+                  if (normalizedValue != null) {
+                    valuesArray.push(normalizedValue);                    
                   }
                 }
               }
             }
-            if (valArray.length) {
-              let keystr = key1;
-              if (keystr !== 's') {
-                keystr = keystr.replace("s", "");
+            
+            if (valuesArray.length) {
+              let runnerKeyString = runnerKey;
+              if (runnerKeyString !== 's') {
+                runnerKeyString = runnerKeyString.replace("s", "");
               }
-              oddArray.push({
-                [keystr] : valArray
+              runnersArray.push({
+                [runnerKeyString] : valuesArray
               });                                         
             }
           }
 
-          if (keyString != null) {
+          if (marketName != null) {
             formattedResults.push({
-              name: keyString,
-              runners: oddArray,
-              marketId: key,
+              name: marketName,
+              runners: runnersArray,
+              marketId: marketKey,
             });            
           }
         }
@@ -53,4 +59,4 @@ const oddsData = async (oddsData, marketData) => {
   return formattedResults;
 };
 
-module.exports = oddsData;
+module.exports = processOddsData;
