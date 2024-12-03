@@ -29,7 +29,7 @@ router.get("/:id", async (req, res) => {
   const payload = await oddsPayload(selectedSidId);
   const oddsResponse = await fetchData(apiUrl, payload); // Fetch data and store it in the variable
   const oddsResult = await oddsData(oddsResponse, marketArray);
-  res.json(oddsResult);
+  res.json(payload);
 });
 
 module.exports = router;
