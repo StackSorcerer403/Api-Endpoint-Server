@@ -38,14 +38,12 @@ const processOddsData = async (oddsDataArray, marketDataMap) => {
             if (valuesArray.length) {
               let runnerKeyString = runnerKey;
               if (runnerKeyString !== 's') {
-                runnerKeyString = runnerKeyString.replace("s", "");
-
-                runnersArray.push({
-                  [runnerKeyString] : valuesArray
-                });                                         
-              } else {
-                runnersArray = valuesArray;
+                runnerKeyString = runnerKeyString.replace("s", "");                                                         
               }
+              
+              runnersArray.push({
+                [runnerKeyString] : valuesArray
+              });
             }
           }
 
