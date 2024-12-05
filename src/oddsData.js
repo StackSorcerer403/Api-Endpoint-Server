@@ -21,14 +21,16 @@ const processOddsData = async (oddsDataArray, marketDataMap) => {
             const runnerData = marketItem[runnerKey];
             valuesArray = [];
             
+            let index = 1;
             for (const valueKey in runnerData) {              
               const valueData = runnerData[valueKey];
               if (valueData != null) {
                 if (valueData[0] !== undefined) {
                   const normalizedValue = valueData[0] / 100;
                   if (normalizedValue != null) {
-                    valuesArray.push(normalizedValue);                    
+                    valuesArray.push(normalizedValue + '_' + index);
                   }
+                  index++;
                 }
               }
             }
@@ -37,10 +39,13 @@ const processOddsData = async (oddsDataArray, marketDataMap) => {
               let runnerKeyString = runnerKey;
               if (runnerKeyString !== 's') {
                 runnerKeyString = runnerKeyString.replace("s", "");
+
+                runnersArray.push({
+                  [runnerKeyString] : valuesArray
+                });                                         
+              } else {
+                runnersArray = valuesArray;
               }
-              runnersArray.push({
-                [runnerKeyString] : valuesArray
-              });                                         
             }
           }
 
