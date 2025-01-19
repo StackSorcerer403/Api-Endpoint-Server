@@ -4,16 +4,13 @@ const { HttpsProxyAgent } = require("https-proxy-agent");
 const fetchData = async (url, payload) => {
   let data = [];
   const proxyList = [
-    "agorcal80:AR2Jg4TbRq@154.193.72.143:50100",
-    "agorcal80:AR2Jg4TbRq@154.193.71.101:50100",
-    "agorcal80:AR2Jg4TbRq@154.193.70.27:50100",
-    "agorcal80:AR2Jg4TbRq@154.193.73.231:50100",
-    "agorcal80:AR2Jg4TbRq@45.142.153.106:50101",
-    "agorcal80:AR2Jg4TbRq@45.142.153.229:50101",
-    "agorcal80:AR2Jg4TbRq@154.193.71.36:50100",
-    "agorcal80:AR2Jg4TbRq@154.193.73.13:50100",
-    "agorcal80:AR2Jg4TbRq@154.193.70.110:50100",
-    "agorcal80:AR2Jg4TbRq@154.193.72.193:50100",
+    "agorcal80:AR2Jg4TbRq@154.16.236.133:50100",
+    "agorcal80:AR2Jg4TbRq@154.193.70.218:50100",
+    "agorcal80:AR2Jg4TbRq@167.94.164.22:50100",
+    "agorcal80:AR2Jg4TbRq@154.193.72.168:50100",
+    "agorcal80:AR2Jg4TbRq@167.94.164.22:50101",
+    "agorcal80:AR2Jg4TbRq@154.193.71.235:50100",
+    "agorcal80:AR2Jg4TbRq@154.193.71.235:50100"    
   ];
 
   // Function to randomly select a proxy
@@ -29,6 +26,7 @@ const fetchData = async (url, payload) => {
     const proxy = selectProxy(); // Select a proxy
     const proxyUrl = `http://${proxy.username}:${proxy.password}@${proxy.host}:${proxy.port}`;
     const agent = new HttpsProxyAgent(proxyUrl); // Create an HTTP proxy agent for HTTPS tunneling
+    console.log(`Using proxy: ${proxyUrl}`);
 
     const options = {
       method: "POST",
@@ -49,7 +47,10 @@ const fetchData = async (url, payload) => {
     }
   } catch (error) {
     console.error("Error fetching data:", error.message);
-    console.error("Error details:", error.response ? error.response.data : error);
+    console.error(
+      "Error details:",
+      error.response ? error.response.data : error
+    );
   }
 
   return data; // Return the fetched data
